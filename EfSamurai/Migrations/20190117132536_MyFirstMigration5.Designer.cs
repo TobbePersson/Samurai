@@ -4,14 +4,16 @@ using EfSamurai.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EfSamurai.Data.Migrations
 {
     [DbContext(typeof(SamuraiContext))]
-    partial class SamuraiContextModelSnapshot : ModelSnapshot
+    [Migration("20190117132536_MyFirstMigration5")]
+    partial class MyFirstMigration5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,32 +27,15 @@ namespace EfSamurai.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("QuoteTypeId");
-
                     b.Property<int?>("SamuraiId");
 
                     b.Property<string>("SamuraiQuote");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("QuoteTypeId");
-
                     b.HasIndex("SamuraiId");
 
                     b.ToTable("Quotes");
-                });
-
-            modelBuilder.Entity("EfSamurai.Domain.QuoteType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Type");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("QuoteType");
                 });
 
             modelBuilder.Entity("EfSamurai.Domain.Samurai", b =>
@@ -74,10 +59,6 @@ namespace EfSamurai.Data.Migrations
 
             modelBuilder.Entity("EfSamurai.Domain.Quote", b =>
                 {
-                    b.HasOne("EfSamurai.Domain.QuoteType", "QuoteType")
-                        .WithMany()
-                        .HasForeignKey("QuoteTypeId");
-
                     b.HasOne("EfSamurai.Domain.Samurai", "Samurai")
                         .WithMany()
                         .HasForeignKey("SamuraiId");
