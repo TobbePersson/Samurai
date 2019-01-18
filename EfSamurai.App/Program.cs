@@ -1,5 +1,6 @@
 ﻿using EfSamurai.Data;
 using EfSamurai.Domain;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 
@@ -16,11 +17,48 @@ namespace EfSamurai.App
             //AddSomeBattles();
 
             AddOneSamuraiWithRelatedData();
+            ListAllSamuraiNames();
+        }
+
+        private static void ListAllSamuraiNames()
+        {
+            var dataAccess = new DataAccess();
+
+            List<Samurai> listOfSamuraiNames = dataAccess.NamesOfAllSamurais();
+
+            PrintSamuraiNames(listOfSamuraiNames);
+        }
+
+        private static void PrintSamuraiNames(List<Samurai> listOfSamuraiNames)
+        {
+            foreach (var name in listOfSamuraiNames)
+            {
+                Console.WriteLine($"{name.Name}");
+            }
         }
 
         private static void ClearDatabase()
         {
-            
+            var context = new SamuraiContext();
+            var battleEvents = context.BattleEvents;
+            context.RemoveRange(battleEvents);
+            var battleLog = context.BattleLogs;
+            context.RemoveRange(battleLog);
+            var battles = context.Battles;
+            context.RemoveRange(battles);
+            var samuraiBattles = context.SamuraiBattles;
+            context.RemoveRange(samuraiBattles);
+            var secretId = context.SecretIdentities;
+            context.RemoveRange(secretId);
+            var qType = context.QuoteTypes;
+            context.RemoveRange(qType);
+            var quote = context.Quotes;
+            context.RemoveRange(quote);
+            var samurai = context.Samurais;
+            context.RemoveRange(samurai);
+            var hairCut = context.HairCuts;
+            context.RemoveRange(hairCut);
+            context.SaveChanges();
         }
 
         private static void AddOneSamuraiWithRelatedData()
@@ -46,17 +84,17 @@ namespace EfSamurai.App
                             BattleName = "Battle of Odaihara",
                             Description = "The 1546 Battle of Odaihara was one of many steps taken by Takeda Shingen, one of Japan's great warlords of the Sengoku period of Japan, in his bid to take over Shinano province.",
                             Brutal = true,
-                            StartDate = new DateTime(2011, 5, 28, 0, 0, 0),
-                            EndDate = new DateTime(2011, 6, 24, 0, 0, 0),
+                            StartDate = new DateTime(1546, 5, 28, 0, 0, 0),
+                            EndDate = new DateTime(1546, 6, 24, 0, 0, 0),
                             BattleLog = new BattleLog
                             {
                                 Name = "Battle of Odaihara Log",
                                 BattleEvents = new List<BattleEvent>
                                 {
-                                    new BattleEvent { EventTime = new DateTime(2011, 5, 30, 0, 0, 0), Summary = "Ten smaurais dead", Description = "Bad" },
-                                    new BattleEvent { EventTime = new DateTime(2011, 6, 10, 0, 0, 0), Summary = "Seven smaurais dead", Description = "Not good"},
-                                    new BattleEvent { EventTime = new DateTime(2011, 6, 21, 0, 0, 0), Summary = "Four smaurais dead", Description = "Betterthan before" },
-                                    new BattleEvent { EventTime = new DateTime(2011, 6, 24, 0, 0, 0), Summary = "Totaly 21 dead samurais", Description = "Wictory!!" },
+                                    new BattleEvent { EventTime = new DateTime(1546, 5, 30, 0, 0, 0), Summary = "Ten smaurais dead", Description = "Bad" },
+                                    new BattleEvent { EventTime = new DateTime(1546, 6, 10, 0, 0, 0), Summary = "Seven smaurais dead", Description = "Not good"},
+                                    new BattleEvent { EventTime = new DateTime(1546, 6, 21, 0, 0, 0), Summary = "Four smaurais dead", Description = "Betterthan before" },
+                                    new BattleEvent { EventTime = new DateTime(1546, 6, 24, 0, 0, 0), Summary = "Totaly 21 dead samurais", Description = "Wictory!!" },
                                 },
 
                             },
