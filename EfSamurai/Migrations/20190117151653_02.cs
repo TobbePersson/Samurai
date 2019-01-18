@@ -2,7 +2,7 @@
 
 namespace EfSamurai.Data.Migrations
 {
-    public partial class MyFirstMigration4 : Migration
+    public partial class _02 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
