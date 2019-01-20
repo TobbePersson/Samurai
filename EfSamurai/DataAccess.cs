@@ -52,6 +52,29 @@ namespace EfSamurai.Data
             return listQuoteFromSamurai;
         }
 
+        public List<BattleLog> ListOfBattlesWithLog(DateTime dateTime1, DateTime dateTime2, bool isBrutal)
+        {
+            //var listOfBattlesWithLog = context.Battles
+            //                                .Where(x => x.StartDate > dateTime1 && x.EndDate < dateTime2 && x.Brutal == isBrutal)
+            //                                .Include(x => x.BattleLog)
+            //                                .ThenInclude(y => y.BattleEvents)
+            //                                .ToList();
+
+            var listOfBattlesWithLog = context.BattleLogs
+                                            .Include(y => y.BattleEvents)
+                                            .Include(x => x.Battle)
+                                            .Where(x => x.Battle.StartDate > dateTime1 && x.Battle.EndDate < dateTime2 && x.Battle.Brutal == isBrutal)
+                                            .ToList();
+            return listOfBattlesWithLog;
+        
+        }
+
+        public List<string> AllSamuraiNamesAndAlias()
+        {
+            var allNamesAndAlias = context.Samurais.Include(x => x.SecretIdentity).Select(x => $"{x.Name} alias {x.SecretIdentity.Identity}").ToList();
+            return allNamesAndAlias;
+        }
+
         public List<String> ListOfBrutalBattles(DateTime dateTime1, DateTime dateTime2, bool brutalIsTrue)
         {
             var listOfBrutalBattles = context.Battles

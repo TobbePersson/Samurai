@@ -25,7 +25,40 @@ namespace EfSamurai.App
             ListAllQuotesOfType("Lame");
             ListAllQuotesOfTypeFromSamurai("Lame");
             ListAllBattles(new DateTime(1500, 1, 1), new DateTime(1600, 1, 1), true);
+            AllSamuraisNameAndAlias();
+            ListAllBattlesWithLog(new DateTime(1500, 1, 1), new DateTime(1600, 1, 1), true);
             
+        }
+
+        private static void ListAllBattlesWithLog(DateTime dateTime1, DateTime dateTime2, bool isBrutal)
+        {
+            var dataAccess = new DataAccess();
+            List<BattleLog> listOfBattlesWithLog = dataAccess.ListOfBattlesWithLog(dateTime1, dateTime2, isBrutal);
+            PrintBattelLog(listOfBattlesWithLog);
+        }
+
+        private static void PrintBattelLog(List<BattleLog> listOfBattlesWithLog)
+        {
+            Console.WriteLine("-----------------------------------------------------");
+
+            foreach (var battle in listOfBattlesWithLog)
+            {
+                Console.WriteLine($"Name of Battle\t\t{battle.Battle.BattleName}");
+                Console.WriteLine($"Log name\t\t{battle.Name}");
+                foreach (var battleEvent in battle.BattleEvents)
+                {
+                    Console.WriteLine($"Event {battleEvent.EventTime.ToShortDateString()}\t\t{battleEvent.Description} ");
+                }
+            }
+        }
+
+        private static void AllSamuraisNameAndAlias()
+        {
+            var dataAccess = new DataAccess();
+
+            List<string> allSamuraiNamesAndAlias = dataAccess.AllSamuraiNamesAndAlias();
+            Console.WriteLine();
+            PrintAllQuotesOfTypeFromSamurai(allSamuraiNamesAndAlias);
         }
 
         private static void ListAllBattles(DateTime dateTime1, DateTime dateTime2, bool brutalIsTrue)
