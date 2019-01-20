@@ -10,14 +10,43 @@ namespace EfSamurai.App
     {
         static void Main(string[] args)
         {
-            ClearDatabase();
-            //AddOneSamurai();
+            //ClearDatabase();
+            //AddOneSamurai("Zelda");
             //AddSomeSamurais();
 
             //AddSomeBattles();
 
-            AddOneSamuraiWithRelatedData();
-            ListAllSamuraiNames();
+            //AddOneSamuraiWithRelatedData();
+            //ListAllSamuraiNames();
+            //ListAllSamuraisOrderByName();
+            //ListAllSamuraisOrderByNameDescending();
+            FindSamuraiWithRealName("unknown");
+        }
+
+        private static void FindSamuraiWithRealName(string realName)
+        {
+            var dataAccess = new DataAccess();
+            List<Samurai> realNameSamurai = dataAccess.FindSamuraiRealName(realName);
+            if (realNameSamurai.Count == 0)
+                Console.WriteLine($"Sorry no Samurai with the name {realName}.");
+            else
+                PrintSamuraiNames(realNameSamurai);
+        }
+
+        private static void ListAllSamuraisOrderByNameDescending()
+        {
+            var dataAccess = new DataAccess();
+            List<Samurai> allSamuraisNameDesc = dataAccess.ListAllSamuraisOrderByNameDesc();
+            PrintSamuraiNames(allSamuraisNameDesc);
+        }
+
+        private static void ListAllSamuraisOrderByName()
+        {
+            var dataAccess = new DataAccess();
+
+            List<Samurai> allSamuraisOrderByName= dataAccess.ListAllSamuraisOrderByName();
+            PrintSamuraiNames(allSamuraisOrderByName);
+
         }
 
         private static void ListAllSamuraiNames()
@@ -65,15 +94,15 @@ namespace EfSamurai.App
         {
             var samurai1 = new Samurai
             {
-                Name = "Takeda Shingen",
-                Age = 52,
-                Weapon = "Japanese swords",
+                Name = "Oda Nobunaga",
+                Age = 47,
+                Weapon = "Pole weapons",
                 Rank = "Daimyō",
-                HairCut = new HairCut { SamuraiHairCut = "Chonmage" },
-                SecretIdentity = new SecretIdentity { Identity = "Tiger of Kai" },
+                HairCut = new HairCut { SamuraiHairCut = "Western" },
+                SecretIdentity = new SecretIdentity { Identity = "unknown" },
                 Quote = new List<Quote>
                 {
-                    new Quote{SamuraiQuote = "Wind, Forest, Fire, Mountain", QuoteType = new QuoteType { Type = "Awesome" } },
+                    new Quote{SamuraiQuote = "unifying factors", QuoteType = new QuoteType { Type = "Lame" } },
                 },
                 SamuraiBattles = new List<SamuraiBattle>
                 {
@@ -100,7 +129,60 @@ namespace EfSamurai.App
                             },
 
                         },
+
                     },
+                    new SamuraiBattle
+                    {
+                        BettleName = new Battle
+                        {
+                            BattleName = "Battle of Okehazama",
+                            Description = "The Battle of Okehazama (桶狭間の戦い Okehazama-no-tatakai) took place in June 1560.",
+                            Brutal = true,
+                            StartDate = new DateTime(1560, 6, 5, 0, 0, 0),
+                            EndDate = new DateTime(1546, 6, 15, 0, 0, 0),
+                            BattleLog = new BattleLog
+                            {
+                                Name = "Battle of Okehazama Log",
+                                BattleEvents = new List<BattleEvent>
+                                {
+                                    new BattleEvent { EventTime = new DateTime(1560, 6, 5, 0, 0, 0), Summary = "100 smaurais dead", Description = "Bad" },
+                                    new BattleEvent { EventTime = new DateTime(1560, 6, 10, 0, 0, 0), Summary = "200 smaurais dead", Description = "Not good"},
+                                    new BattleEvent { EventTime = new DateTime(1560, 6, 14, 0, 0, 0), Summary = "3000 smaurais dead", Description = "Betterthan before" },
+                                    new BattleEvent { EventTime = new DateTime(1560, 6, 15, 0, 0, 0), Summary = "All dead samurais", Description = "Loss!!" },
+                                },
+
+                            },
+
+                        },
+
+                    },
+                    new SamuraiBattle
+                    {
+                        BettleName = new Battle
+                        {
+                            BattleName = "Battle of Nagashino",
+                            Description = "The Battle of Nagashino (長篠の戦い Nagashino no Tatakai) took place in 1575 near Nagashino Castle on the plain of Shitarabara in the Mikawa Province of Japan.",
+                            Brutal = true,
+                            StartDate = new DateTime(1575, 6, 15, 0, 0, 0),
+                            EndDate = new DateTime(1575, 6, 29, 0, 0, 0),
+                            BattleLog = new BattleLog
+                            {
+                                Name = "Battle of Nagashino Log",
+                                BattleEvents = new List<BattleEvent>
+                                {
+                                    new BattleEvent { EventTime = new DateTime(1575, 6, 15, 0, 0, 0), Summary = "1001 smaurais dead", Description = "Bad" },
+                                    new BattleEvent { EventTime = new DateTime(1575, 6, 17, 0, 0, 0), Summary = "3276 smaurais dead", Description = "Not good"},
+                                    new BattleEvent { EventTime = new DateTime(1575, 6, 23, 0, 0, 0), Summary = "4500 smaurais dead", Description = "Betterthan before" },
+                                    new BattleEvent { EventTime = new DateTime(1575, 6, 29, 0, 0, 0), Summary = "7654 dead samurais", Description = "Loss!!" },
+                                },
+
+                            },
+
+                        },
+
+                    },
+
+
                 },
             };
             var context = new SamuraiContext();
@@ -145,9 +227,9 @@ namespace EfSamurai.App
             context.SaveChanges();
         }
 
-        private static void AddOneSamurai()
+        private static void AddOneSamurai(string samuraiName)
         {
-            var newSamurai = new Samurai { Name = "Zelda"};
+            var newSamurai = new Samurai { Name = samuraiName};
 
             var context = new SamuraiContext();
             context.Samurais.Add(newSamurai);
