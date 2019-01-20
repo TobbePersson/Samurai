@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EfSamurai.Data.Migrations
 {
-    public partial class _01 : Migration
+    public partial class MyFirstMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -36,19 +36,6 @@ namespace EfSamurai.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_HairCuts", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "QuoteTypes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Type = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_QuoteTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -121,18 +108,11 @@ namespace EfSamurai.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     SamuraiQuote = table.Column<string>(nullable: true),
-                    SamuraiId = table.Column<int>(nullable: true),
-                    QuoteTypeId = table.Column<int>(nullable: true)
+                    SamuraiId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Quotes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Quotes_QuoteTypes_QuoteTypeId",
-                        column: x => x.QuoteTypeId,
-                        principalTable: "QuoteTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Quotes_Samurais_SamuraiId",
                         column: x => x.SamuraiId,
@@ -185,20 +165,41 @@ namespace EfSamurai.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "QuoteTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Type = table.Column<string>(nullable: true),
+                    QuoteId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuoteTypes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_QuoteTypes_Quotes_QuoteId",
+                        column: x => x.QuoteId,
+                        principalTable: "Quotes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_BattleEvents_BattleLogId",
                 table: "BattleEvents",
                 column: "BattleLogId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Quotes_QuoteTypeId",
-                table: "Quotes",
-                column: "QuoteTypeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Quotes_SamuraiId",
                 table: "Quotes",
                 column: "SamuraiId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuoteTypes_QuoteId",
+                table: "QuoteTypes",
+                column: "QuoteId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SamuraiBattles_BattleId",
@@ -223,7 +224,7 @@ namespace EfSamurai.Data.Migrations
                 name: "BattleEvents");
 
             migrationBuilder.DropTable(
-                name: "Quotes");
+                name: "QuoteTypes");
 
             migrationBuilder.DropTable(
                 name: "SamuraiBattles");
@@ -235,13 +236,13 @@ namespace EfSamurai.Data.Migrations
                 name: "BattleLogs");
 
             migrationBuilder.DropTable(
-                name: "QuoteTypes");
-
-            migrationBuilder.DropTable(
-                name: "Samurais");
+                name: "Quotes");
 
             migrationBuilder.DropTable(
                 name: "Battles");
+
+            migrationBuilder.DropTable(
+                name: "Samurais");
 
             migrationBuilder.DropTable(
                 name: "HairCuts");

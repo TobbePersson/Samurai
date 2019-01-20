@@ -21,6 +21,53 @@ namespace EfSamurai.App
             //ListAllSamuraisOrderByName();
             //ListAllSamuraisOrderByNameDescending();
             FindSamuraiWithRealName("unknown");
+            ListAllQuotesOfType("Lame");
+            ListAllQuotesOfType("Lame");
+            ListAllQuotesOfTypeFromSamurai("Lame");
+            ListAllBattles(new DateTime(1500, 1, 1), new DateTime(1600, 1, 1), true);
+            
+        }
+
+        private static void ListAllBattles(DateTime dateTime1, DateTime dateTime2, bool brutalIsTrue)
+        {
+            var dataAccess = new DataAccess();
+
+            List<string> brutaleBattles = dataAccess.ListOfBrutalBattles(dateTime1, dateTime2, brutalIsTrue);
+            PrintAllQuotesOfTypeFromSamurai(brutaleBattles);
+        }
+
+        private static void ListAllQuotesOfTypeFromSamurai(string quoteType)
+        {
+            var dataAccess = new DataAccess();
+
+            List<string> listOfSamuraiQuotesWithSamurai = dataAccess.ListAllQuotesOfTypeFromSamurai(quoteType);
+            PrintAllQuotesOfTypeFromSamurai(listOfSamuraiQuotesWithSamurai);
+        }
+
+        private static void PrintAllQuotesOfTypeFromSamurai(List<string> listOfSamuraiQuotesWithSamurai)
+        {
+            foreach (var quote in listOfSamuraiQuotesWithSamurai)
+            {
+                Console.WriteLine(quote);
+            }
+        }
+
+        private static void ListAllQuotesOfType(string quoteType)
+        {
+            var dataAccess = new DataAccess();
+
+            List<Quote> quotesOfType = dataAccess.ListAllQuotesOfTypes(quoteType);
+            PrintAllQuotesOfType(quotesOfType, quoteType);
+        }
+
+        private static void PrintAllQuotesOfType(List<Quote> quotesOfType, string quoteType)
+        {
+            Console.WriteLine($"Quotes of type '{quoteType}':");
+
+            foreach (var quote in quotesOfType)
+            {
+                Console.WriteLine($"{quote.SamuraiQuote}");
+            }
         }
 
         private static void FindSamuraiWithRealName(string realName)

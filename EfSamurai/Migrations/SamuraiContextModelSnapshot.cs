@@ -91,15 +91,11 @@ namespace EfSamurai.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("QuoteTypeId");
-
                     b.Property<int?>("SamuraiId");
 
                     b.Property<string>("SamuraiQuote");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("QuoteTypeId");
 
                     b.HasIndex("SamuraiId");
 
@@ -112,9 +108,14 @@ namespace EfSamurai.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("QuoteId");
+
                     b.Property<string>("Type");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("QuoteId")
+                        .IsUnique();
 
                     b.ToTable("QuoteTypes");
                 });
@@ -176,7 +177,7 @@ namespace EfSamurai.Data.Migrations
             modelBuilder.Entity("EfSamurai.Domain.BattleEvent", b =>
                 {
                     b.HasOne("EfSamurai.Domain.BattleLog", "BattleLog")
-                        .WithMany()
+                        .WithMany("BattleEvents")
                         .HasForeignKey("BattleLogId");
                 });
 
@@ -190,13 +191,17 @@ namespace EfSamurai.Data.Migrations
 
             modelBuilder.Entity("EfSamurai.Domain.Quote", b =>
                 {
-                    b.HasOne("EfSamurai.Domain.QuoteType", "QuoteType")
-                        .WithMany()
-                        .HasForeignKey("QuoteTypeId");
-
                     b.HasOne("EfSamurai.Domain.Samurai", "Samurai")
-                        .WithMany()
+                        .WithMany("Quote")
                         .HasForeignKey("SamuraiId");
+                });
+
+            modelBuilder.Entity("EfSamurai.Domain.QuoteType", b =>
+                {
+                    b.HasOne("EfSamurai.Domain.Quote", "Quote")
+                        .WithOne("QuoteType")
+                        .HasForeignKey("EfSamurai.Domain.QuoteType", "QuoteId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("EfSamurai.Domain.Samurai", b =>
